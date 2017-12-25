@@ -40,14 +40,30 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
     }
     data class ColorCircularImageContainer(var bitmap: Bitmap) {
         var colorCircularImage = ColorCircularImage(bitmap)
+        val state = ColorCircularImageState()
         fun draw(canvas:Canvas,paint:Paint) {
-
+            colorCircularImage.draw(canvas,paint,state.scale)
         }
         fun update(stopcb:(Float)->Unit) {
-
+            state.update(stopcb)
         }
         fun startUpdating(startcb:()->Unit) {
-
+            state.startUpdating(startcb)
+        }
+    }
+    data class ColorCircularImageState(var scale:Float = 0f,var dir:Float = 0f,var prevScale:Float = 0f) {
+        fun update(stopcb:(Float)->Unit) {
+            scale += dir*0.1f
+            if(Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                dir = 0f
+                prevScale = scale
+                stopcb(scale)
+            }
+        }
+        fun startUpdating(startcb: () -> Unit) {
+            dir = 1-2*scale
+            startcb()
         }
     }
 }
