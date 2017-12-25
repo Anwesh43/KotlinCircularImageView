@@ -8,7 +8,7 @@ import android.view.MotionEvent
 /**
  * Created by anweshmishra on 25/12/17.
  */
-class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
+class ColorCircularImageView(ctx:Context,var bitmap: Bitmap,var color:Int):View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     override fun onDraw(canvas:Canvas) {
 
@@ -21,7 +21,7 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
         }
         return true
     }
-    data class ColorCircularImage(var bitmap:Bitmap) {
+    data class ColorCircularImage(var bitmap:Bitmap,var color:Int) {
         fun draw(canvas:Canvas,paint:Paint,scale:Float) {
             val w = bitmap.width.toFloat()
             val h = bitmap.height.toFloat()
@@ -31,6 +31,7 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
             canvas.clipPath(path)
             canvas.save()
             canvas.translate(w/2,h/2)
+            paint.color = Color.argb(100,Color.red(color),Color.green(color),Color.blue(color))
             canvas.drawBitmap(bitmap,-w/2,-h/2,paint)
             canvas.drawArc(RectF(-w/2,-h/2,w/2,h/2),0f,360*scale,true,paint)
             canvas.restore()
@@ -38,8 +39,8 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
         }
         fun handleTap(x:Float,y:Float):Boolean = x>=0 && x<=bitmap.width && y>=0 && y<=bitmap.height
     }
-    data class ColorCircularImageContainer(var bitmap: Bitmap) {
-        var colorCircularImage = ColorCircularImage(bitmap)
+    data class ColorCircularImageContainer(var bitmap: Bitmap,var color:Int) {
+        var colorCircularImage = ColorCircularImage(bitmap,color)
         val state = ColorCircularImageState()
         fun draw(canvas:Canvas,paint:Paint) {
             colorCircularImage.draw(canvas,paint,state.scale)
@@ -69,16 +70,22 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
         }
     }
     data class ColorCircularImageRenderer(var view:ColorCircularImageView) {
-        var colorCircularImageContainer = ColorCircularImageContainer(view.bitmap)
+        var colorCircularImageContainer = ColorCircularImageContainer(view.bitmap,view.color)
+        var animator:SimpleAnimator = SimpleAnimator(view)
         fun update() {
-
+            animator.update{
+                colorCircularImageContainer.update{
+                    animator.stop()
+                }
+            }
         }
         fun draw(canvas:Canvas,paint:Paint) {
+            canvas.drawColor(Color.parseColor("#00212121"))
             colorCircularImageContainer.draw(canvas,paint)
         }
         fun handleTap(x:Float,y:Float) {
             colorCircularImageContainer.startUpdating(x,y,{
-
+                animator.startAnimation()
             })
         }
     }
