@@ -21,7 +21,7 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
         }
         return true
     }
-    class ColorCirularImage(var bitmap:Bitmap) {
+    data class ColorCircularImage(var bitmap:Bitmap) {
         fun draw(canvas:Canvas,paint:Paint,scale:Float) {
             val w = bitmap.width.toFloat()
             val h = bitmap.height.toFloat()
@@ -37,5 +37,17 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
             canvas.restore()
         }
         fun handleTap(x:Float,y:Float):Boolean = x>=0 && x<=bitmap.width && y>=0 && y<=bitmap.height
+    }
+    data class ColorCircularImageContainer(var bitmap: Bitmap) {
+        var colorCircularImage = ColorCircularImage(bitmap)
+        fun draw(canvas:Canvas,paint:Paint) {
+
+        }
+        fun update(stopcb:(Float)->Unit) {
+
+        }
+        fun startUpdating(startcb:()->Unit) {
+
+        }
     }
 }
