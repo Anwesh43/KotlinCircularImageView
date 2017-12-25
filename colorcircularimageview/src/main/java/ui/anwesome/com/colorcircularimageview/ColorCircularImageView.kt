@@ -82,4 +82,30 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
             })
         }
     }
+    data class SimpleAnimator(var view:View,var time:Long = 50) {
+        var animated:Boolean = false
+        fun update(updatecb:()->Unit) {
+            if(animated) {
+                updatecb()
+                try {
+                    view.invalidate()
+                    Thread.sleep(time)
+                }
+                catch(ex:Exception) {
+
+                }
+            }
+        }
+        fun startAnimation() {
+            if(!animated) {
+                animated = true
+                view.postInvalidate()
+            }
+        }
+        fun stop() {
+            if(animated) {
+               animated = false
+            }
+        }
+    }
 }
