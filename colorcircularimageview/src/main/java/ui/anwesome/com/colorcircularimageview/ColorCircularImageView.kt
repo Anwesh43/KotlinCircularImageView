@@ -1,9 +1,11 @@
 package ui.anwesome.com.colorcircularimageview
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.graphics.*
 import android.view.MotionEvent
+import android.view.ViewGroup
 
 /**
  * Created by anweshmishra on 25/12/17.
@@ -115,6 +117,13 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap,var color:Int):View(
             if(animated) {
                animated = false
             }
+        }
+    }
+    companion object {
+        fun create(activity:Activity,bitmap:Bitmap,color:Int):ColorCircularImageView {
+            val view = ColorCircularImageView(activity,bitmap,color)
+            activity.addContentView(view,ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT))
+            return view
         }
     }
 }
