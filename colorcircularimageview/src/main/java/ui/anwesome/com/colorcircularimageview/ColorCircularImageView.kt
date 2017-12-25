@@ -47,8 +47,10 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
         fun update(stopcb:(Float)->Unit) {
             state.update(stopcb)
         }
-        fun startUpdating(startcb:()->Unit) {
-            state.startUpdating(startcb)
+        fun startUpdating(x:Float,y:Float,startcb:()->Unit) {
+            if(colorCircularImage.handleTap(x,y)) {
+                state.startUpdating(startcb)
+            }
         }
     }
     data class ColorCircularImageState(var scale:Float = 0f,var dir:Float = 0f,var prevScale:Float = 0f) {
@@ -64,6 +66,20 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap):View(ctx) {
         fun startUpdating(startcb: () -> Unit) {
             dir = 1-2*scale
             startcb()
+        }
+    }
+    data class ColorCircularImageRenderer(var view:ColorCircularImageView) {
+        var colorCircularImageContainer = ColorCircularImageContainer(view.bitmap)
+        fun update() {
+
+        }
+        fun draw(canvas:Canvas,paint:Paint) {
+            colorCircularImageContainer.draw(canvas,paint)
+        }
+        fun handleTap(x:Float,y:Float) {
+            colorCircularImageContainer.startUpdating(x,y,{
+
+            })
         }
     }
 }
