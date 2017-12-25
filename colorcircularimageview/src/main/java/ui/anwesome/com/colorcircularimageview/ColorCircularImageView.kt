@@ -35,8 +35,9 @@ class ColorCircularImageView(ctx:Context,var bitmap: Bitmap,var color:Int):View(
             canvas.clipPath(path)
             canvas.save()
             canvas.translate(w/2,h/2)
-            paint.color = Color.argb(100,Color.red(color),Color.green(color),Color.blue(color))
+            paint.color = Color.BLACK
             canvas.drawBitmap(bitmap,-w/2,-h/2,paint)
+            paint.color = Color.argb(100,Color.red(color),Color.green(color),Color.blue(color))
             canvas.drawArc(RectF(-w/2,-h/2,w/2,h/2),0f,360*scale,true,paint)
             canvas.restore()
             canvas.restore()
